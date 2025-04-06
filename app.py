@@ -180,7 +180,7 @@ with tab1:
                                         update_task(task["ID"], {
                                             "Upvotes": (task.get("Upvotes", "") + f",{username}").strip(","),
                                             "Voted By": (voted_by + f",{username}").strip(","),
-                                            "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                         })
                                         log_activity(task["ID"], f"{username} upvoted the task.")
                                         st.success("You voted 👍")
@@ -192,7 +192,7 @@ with tab1:
                                         update_task(task["ID"], {
                                             "Downvotes": (task.get("Downvotes", "") + f"|{reason_log}").strip("|"),
                                             "Voted By": (voted_by + f",{username}").strip(","),
-                                            "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                            "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                         })
                                         log_activity(task["ID"], f"{username} downvoted the task with reason: {downvote_reason}")
                                         st.error("You downvoted 👎")
@@ -213,7 +213,7 @@ with tab1:
                             if st.button("Update Assignee", key=f"{task['ID']}_assign_btn"):
                                 update_task(task["ID"], {
                                     "Assigned To": new_assignee,
-                                    "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                    "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                 })
                                 log_activity(task["ID"], f"{username} reassigned task to {new_assignee}")
                                 st.rerun()
@@ -226,7 +226,7 @@ with tab1:
                         if st.button(f"Move to {next_status}", key=f"{task['ID']}_move"):
                             update_task(task["ID"], {
                                 "Status": next_status,
-                                "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                             })
                             log_activity(task["ID"], f"{username} moved task to {next_status}")
                             st.rerun()
