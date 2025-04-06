@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, timezone
 import streamlit.components.v1 as components
 import gsheet as gs
 from streamlit_autorefresh import st_autorefresh
@@ -49,8 +49,8 @@ with tab2:
             assigned_to = username
 
         if st.button("Add Task"):
-            task_id = f"TSK{int(datetime.now().timestamp())}"  # unique task ID
-            now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            task_id = f"TSK{int(datetime.utcnow().timestamp())}"  # unique task ID
+            now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
             task_data = {
                 "ID": task_id,
@@ -127,7 +127,7 @@ with tab1:
 
 
                             last_updated = datetime.strptime(task["Last Updated"], '%Y-%m-%d %H:%M:%S')
-                            elapsed_time = datetime.now() - last_updated
+                            elapsed_time = datetime.now(timezone.utc) - last_updated
 
                             if len(upvotes) >= 4:
                                 next_status = status_flow.get(task.get("Previous Status", ""), "Completed")
@@ -138,7 +138,7 @@ with tab1:
                                     "Downvotes": "",  # Reset
                                     "Voted By": "",  # Reset
                                     "Previous Status": "",  # Reset
-                                    "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                    "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                 })
                                 log_activity(task["ID"], f"Task auto-moved from Voting to {next_status}")
                                 st.rerun()
@@ -149,7 +149,7 @@ with tab1:
                                     update_task(task["ID"], {
                                         "Status": next_status,
                                         "Upvotes": "AUTO-MOVED",
-                                        "Last Updated": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                        "Last Updated": datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                     })
                                     log_activity(task["ID"], f"{username} manually moved task to {next_status} after timeout")
                                     st.rerun()
@@ -157,7 +157,7 @@ with tab1:
                         if task["Status"] not in ["Voting","Completed"] and role in ["editor", "admin"]:
                             if role == "admin" or task["Created By"] == username:
                                 if st.button("📤 Send for Voting", key=f"{task['ID']}_send_vote"):
-                                    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                    now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
                                     update_task(task["ID"], {
                                         "Status": "Voting",
                                         "Voting Start": now,
