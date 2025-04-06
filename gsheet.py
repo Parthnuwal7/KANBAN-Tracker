@@ -11,7 +11,7 @@ creds_dict = st.secrets["google"]
 
 # Temporary write to a file
 with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
-    json.dump(creds_dict, tmp)
+    json.dump(dict(creds_dict), tmp)
     tmp.flush()
     creds = ServiceAccountCredentials.from_json_keyfile_name(tmp.name, scope)
 
