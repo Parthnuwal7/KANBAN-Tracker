@@ -7,7 +7,7 @@ import json
 import tempfile
 
 # Define scope
-creds_dict = st.secrets["Credentials"]
+creds_dict = st.secrets["google"]
 
 # Temporary write to a file
 with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
