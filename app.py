@@ -234,10 +234,10 @@ with tab1:
 
 with tab3:
     st.header("📜 Activity Log")
-    st.write("Raw logs from get_activity_logs():", logs)
 
     logs = gs.get_activity_logs()
     st_autorefresh(interval=10 * 1000, key="activity_refresh")
+    st.write("Raw logs from get_activity_logs():", logs)
     
     if logs:
         entries = []
