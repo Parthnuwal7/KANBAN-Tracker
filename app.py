@@ -127,6 +127,7 @@ with tab1:
 
 
                             last_updated = datetime.strptime(task["Last Updated"], '%Y-%m-%d %H:%M:%S')
+                            last_updated = last_updated.replace(tzinfo=timezone.utc)
                             elapsed_time = datetime.now(timezone.utc) - last_updated
 
                             if len(upvotes) >= 4:
