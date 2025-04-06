@@ -238,7 +238,6 @@ with tab3:
 
     logs = gs.get_activity_logs()
     st_autorefresh(interval=10 * 1000, key="activity_refresh")
-    st.write("Raw logs from get_activity_logs():", logs)
     
     if logs:
         entries = []
