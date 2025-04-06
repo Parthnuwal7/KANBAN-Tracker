@@ -4,10 +4,14 @@ import pandas as pd
 from datetime import datetime
 
 # Define scope
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds_dict = st.secrets["credentials"]
 
-# Load credentials
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+# Temporary write to a file
+with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
+    json.dump(creds_dict, tmp)
+    tmp.flush()
+    creds = ServiceAccountCredentials.from_json_keyfile_name(tmp.name, scope)
+
 client = gspread.authorize(creds)
 
 # Open the spreadsheet
