@@ -1,9 +1,9 @@
+import streamlit as st
 import json
 
-# Load from config file
+# Load from Streamlit secrets
 def load_users():
-    with open("config/users.json") as f:
-        return json.load(f)
+    return st.secrets["users"]
 
 def authenticate_user(username):
     users = load_users()
