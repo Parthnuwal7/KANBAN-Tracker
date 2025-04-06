@@ -6,7 +6,10 @@ import streamlit as st
 import json
 import tempfile
 
+
 # Define scope
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+
 creds_dict = st.secrets["google"]
 
 # Temporary write to a file
