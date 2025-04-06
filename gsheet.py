@@ -48,7 +48,7 @@ def log_activity(task_id, message):
     row_index = df[df['ID'] == task_id].index[0] + 2
     col_index = df.columns.get_loc("Activity Log") + 1
     prev_log = worksheet.cell(row_index, col_index).value or ""
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
     new_log = f"{prev_log}\n[{timestamp}] {message}"
     worksheet.update_cell(row_index, col_index, new_log)
 
