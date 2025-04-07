@@ -4,3 +4,4 @@ pandas
 oauth2client
 streamlit_autorefresh
 pytz
+gspread-utils
