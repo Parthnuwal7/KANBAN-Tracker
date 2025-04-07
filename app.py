@@ -331,9 +331,6 @@ with tab3:
     else:
         st.info("No activity yet.")
 
-
-with tab4:
-    st.header("📌 My Tasks")
 # ----- LOGIC FOR TAB 4 Personalized tab --------
 # Define priority order for sorting
 priority_order = {'High': 1, 'Medium': 2, 'Low': 3}
@@ -342,7 +339,7 @@ priority_order = {'High': 1, 'Medium': 2, 'Low': 3}
 status_stages = ["To Be Done", "In Progress", "In Voting", "Done"]
 
 def render_my_kanban(df_tasks):
-    st.title("📌 My Tasks - Personalized Kanban")
+    st.title("📌 My Tasks")
 
     username = st.session_state.get("username")
     if not username:
@@ -372,3 +369,6 @@ def render_my_kanban(df_tasks):
                     st.markdown(f"**Created By:** {task['Created By']}")
                     st.markdown(f"**Last Updated:** {task['Last Updated']}")
                     st.markdown(f"**Activity Log:**\n{task['Activity Log']}")
+
+with tab4:
+    render_my_kanban(df)
