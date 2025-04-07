@@ -12,13 +12,35 @@ from gsheet import get_all_tasks, append_task, update_task, log_activity
 st.set_page_config(page_title="X-101 Kanban Board", layout="wide")
 st.title("🧠 Project X-101 Kanban Board")
 ist = pytz.timezone('Asia/Kolkata')
-# --- Login ---
-username = st.sidebar.text_input("Enter your username")
-role = authenticate_user(username)
 
-if not role:
-    st.warning("Enter a valid username.")
-    st.stop()
+#-- LOGIN Module ---
+if "user" not in st.session_state:
+    st.title("🔐 Login to Project X101")
+
+    with st.form("login_form"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submitted = st.form_submit_button("Login")
+
+        if submitted:
+            user_info = authenticate_user(username, password)
+            if user_info:
+                st.session_state["user"] = {
+                    "username": username,
+                    "role": user_info["role"],
+                    "name": user_info["name"]
+                }
+                st.success(f"Welcome {user_info['name']}!")
+                st.rerun()
+            else:
+                st.error("Invalid username or password")
+
+else:
+    user = st.session_state["user"]
+    st.sidebar.write(f"👋 Logged in as {user['name']} ({user['role']})")
+    if st.sidebar.button("Logout"):
+        del st.session_state["user"]
+        st.rerun()
 
 st.sidebar.success(f"Logged in as: {username} ({role})")
 tab1, tab2, tab3 = st.tabs(["🏠 Home", "➕ Add Task", "📜 Activity Log"])
@@ -37,6 +59,9 @@ voting_tasks = df[
 
 with tab2:
     st.header("➕ Add New Task")
+    if user["role"] == "Viewer":
+        st.warning("You have read-only access.")
+    # show Kanban in read-only mode
     if role in ["editor", "admin"]:
         title = st.text_input("Task Title")
         description = st.text_area("Description")
