@@ -356,8 +356,8 @@ def render_my_kanban(df_tasks):
     status_to_col = {
         "To Be Done": col1,
         "In Progress": col2,
-        "Voting": col3,
-        "Done": col4
+        "Completed": col3,
+        "Voting": col4
     }
 
     # Card styling
