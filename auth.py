@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 from pytz import timezone
-import gspread_utils
-from gspread_utils import get_sheet_df, update_cell
+import gspread
 
 IST = timezone("Asia/Kolkata")
+
+def get_sheet_df(sheet):
+    return pd.DataFrame(sheet.get_all_records())
+
+def update_cell(sheet, row, col, value):
+    sheet.update_cell(row, col, value)
 
 def load_users():
     df = get_sheet_df("Users")
