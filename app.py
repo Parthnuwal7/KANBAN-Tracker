@@ -346,29 +346,42 @@ def render_my_kanban(df_tasks):
         st.warning("You must be logged in to view your tasks.")
         return
 
-    # Filter only tasks assigned to the logged-in user
     df_user_tasks = df_tasks[df_tasks["Assigned To"] == username].copy()
-
-    # Convert deadline to datetime
     df_user_tasks["Deadline"] = pd.to_datetime(df_user_tasks["Deadline"], errors='coerce')
     df_user_tasks["Priority Rank"] = df_user_tasks["Priority"].map(priority_order)
 
-    # Display tasks grouped by new status stages
+    # Styling for task cards
+    card_style = """
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-left: 5px solid #4a90e2;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    """
+
     for status in status_stages:
-        st.subheader(f"📍 {status}")
+        st.markdown(f"## 📍 {status}")
         status_tasks = df_user_tasks[df_user_tasks["Status"] == status].sort_values(
             by=["Deadline", "Priority Rank"]
         )
+
         if status_tasks.empty:
-            st.write("No tasks in this stage.")
+            st.markdown("*No tasks in this stage.*")
         else:
             for _, task in status_tasks.iterrows():
-                with st.expander(f"📝 {task['Title']} (Due: {task['Deadline'].strftime('%Y-%m-%d') if pd.notnull(task['Deadline']) else 'N/A'})"):
-                    st.markdown(f"**Description:** {task['Description']}")
-                    st.markdown(f"**Priority:** {task['Priority']}")
-                    st.markdown(f"**Created By:** {task['Created By']}")
-                    st.markdown(f"**Last Updated:** {task['Last Updated']}")
-                    st.markdown(f"**Activity Log:**\n{task['Activity Log']}")
+                with st.container():
+                    st.markdown(f"""
+                        <div style="{card_style}">
+                            <h4>📝 {task['Title']}</h4>
+                            <p><strong>📅 Deadline:</strong> {task['Deadline'].strftime('%Y-%m-%d') if pd.notnull(task['Deadline']) else 'N/A'}</p>
+                            <p><strong>🔥 Priority:</strong> {task['Priority']}</p>
+                            <p><strong>👤 Created By:</strong> {task['Created By']}</p>
+                            <p><strong>🕒 Last Updated:</strong> {task['Last Updated']}</p>
+                            <p><strong>🗂️ Description:</strong> {task['Description']}</p>
+                            <p><strong>📜 Activity Log:</strong><br>{task['Activity Log']}</p>
+                        </div>
+                    """, unsafe_allow_html=True)
 
 with tab4:
     render_my_kanban(df)
