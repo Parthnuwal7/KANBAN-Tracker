@@ -26,19 +26,20 @@ if "user" not in st.session_state:
             user_info = authenticate_user(username, password)
             if user_info:
                 st.session_state["user"] = {
-                    "Username": username,
-                    "Role": user_info["Role"],
-                    "Name": user_info["Name"]
+                    "username": username,
+                    "role": user_info["role"],
+                    "name": user_info["name"]
                 }
-                st.success(f"Welcome {user_info['Name']}!")
+                st.success(f"Welcome {user_info['name']}!")
                 st.rerun()
+
             else:
                 st.error("Invalid username or password")
 
 else:
     user = st.session_state["user"]
-    role = user["Role"]
-    username = user["Username"]
+    role = user["role"]
+    username = user["username"]
     st.sidebar.write(f"👋 Logged in as {user['name']} ({user['role']})")
     if st.sidebar.button("Logout"):
         del st.session_state["user"]
