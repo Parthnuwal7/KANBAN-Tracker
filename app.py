@@ -342,46 +342,63 @@ def render_my_kanban(df_tasks):
     st.title("📌 My Tasks")
 
     username = st.session_state.get("user", {}).get("username")
+    name = st.session_state.get("user",{}).get("name")
     if not username:
         st.warning("You must be logged in to view your tasks.")
         return
 
-    df_user_tasks = df_tasks[df_tasks["Assigned To"] == username].copy()
+    df_user_tasks = df_tasks[df_tasks["Assigned To"] == name].copy()
     df_user_tasks["Deadline"] = pd.to_datetime(df_user_tasks["Deadline"], errors='coerce')
     df_user_tasks["Priority Rank"] = df_user_tasks["Priority"].map(priority_order)
 
-    # Styling for task cards
+    # Create 4 columns
+    col1, col2, col3, col4 = st.columns(4)
+    status_to_col = {
+        "To Be Done": col1,
+        "In Progress": col2,
+        "In Voting": col3,
+        "Done": col4
+    }
+
+    # Card styling
     card_style = """
-        background-color: #f9f9f9;
+        background-color: #fefefe;
         border-radius: 10px;
-        padding: 15px;
+        padding: 12px;
         margin-bottom: 10px;
-        border-left: 5px solid #4a90e2;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        border-left: 6px solid {color};
+        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     """
 
+    # Priority-based color mapping
+    priority_colors = {
+        "High": "#e74c3c",     # Red
+        "Medium": "#f39c12",   # Orange
+        "Low": "#2ecc71",      # Green
+    }
+
     for status in status_stages:
-        st.markdown(f"## 📍 {status}")
         status_tasks = df_user_tasks[df_user_tasks["Status"] == status].sort_values(
             by=["Deadline", "Priority Rank"]
         )
 
-        if status_tasks.empty:
-            st.markdown("*No tasks in this stage.*")
-        else:
-            for _, task in status_tasks.iterrows():
-                with st.container():
+        with status_to_col[status]:
+            st.markdown(f"### 📍 {status}")
+            if status_tasks.empty:
+                st.markdown("*No tasks*")
+            else:
+                for _, task in status_tasks.iterrows():
+                    color = priority_colors.get(task["Priority"], "#3498db")  # default blue
                     st.markdown(f"""
-                        <div style="{card_style}">
-                            <h4>📝 {task['Title']}</h4>
+                        <div style="{card_style.format(color=color)}">
+                            <h5>📝 {task['Title']}</h5>
                             <p><strong>📅 Deadline:</strong> {task['Deadline'].strftime('%Y-%m-%d') if pd.notnull(task['Deadline']) else 'N/A'}</p>
                             <p><strong>🔥 Priority:</strong> {task['Priority']}</p>
-                            <p><strong>👤 Created By:</strong> {task['Created By']}</p>
-                            <p><strong>🕒 Last Updated:</strong> {task['Last Updated']}</p>
-                            <p><strong>🗂️ Description:</strong> {task['Description']}</p>
-                            <p><strong>📜 Activity Log:</strong><br>{task['Activity Log']}</p>
+                            <p><strong>👤 By:</strong> {task['Created By']}</p>
+                            <p><strong>🕒 Updated:</strong> {task['Last Updated']}</p>
                         </div>
                     """, unsafe_allow_html=True)
+
 
 with tab4:
     render_my_kanban(df)
