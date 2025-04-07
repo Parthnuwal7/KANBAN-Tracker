@@ -396,7 +396,7 @@ def render_my_kanban(df_tasks):
                             <p><strong>🔥 Priority:</strong> {task['Priority']}</p>
                             <p><strong>👤 By:</strong> {task['Created By']}</p>
                             <p><strong>🕒 Updated:</strong> {task['Last Updated']}</p>
-                            <p><strong>👍 Upvotes:</strong> {len(task['Upvotes'])}</p>
+                            <p><strong>👍 Upvotes:</strong> {task['Upvotes']}</p>
                         </div>
                     """, unsafe_allow_html=True)
 
