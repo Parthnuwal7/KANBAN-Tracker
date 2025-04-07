@@ -64,7 +64,7 @@ with tab2:
     if user["role"] == "Viewer":
         st.warning("You have read-only access.")
     # show Kanban in read-only mode
-    if role in ["editor", "admin"]:
+    if role in ["Editor", "Admin"]:
         title = st.text_input("Task Title")
         description = st.text_area("Description")
         priority = st.selectbox("Priority", ["Low", "Medium", "High"])
@@ -149,7 +149,7 @@ with tab1:
                             voted_by = task.get("Voted By", "").split(",") if task["Voted By"] else []
                             not_voted = [u for u in ["Parth", "Arka", "Mohit", "Rajat", "Nishtha"] if u not in voted_by]
                             st.caption(f"Not Voted: {', '.join(not_voted)}")
-                            if task["Status"] == "Voting" and task["Previous Status"] == "Completed" and role in ["editor", "admin"]:
+                            if task["Status"] == "Voting" and task["Previous Status"] == "Completed" and role in ["Editor", "Admin"]:
                                 st.success("✅ Task is completed. No further voting allowed.")
                                 continue  # Skip further voting logic
 
@@ -172,7 +172,7 @@ with tab1:
                                 log_activity(task["ID"], f"Task auto-moved from Voting to {next_status}")
                                 st.rerun()
 
-                            elif elapsed_time > timedelta(hours=12) and role == "admin":
+                            elif elapsed_time > timedelta(hours=12) and role == "Admin":
                                 if st.button("🛠️ Override & Move (12h passed)", key=f"{task['ID']}_override"):
                                     next_status = status_flow.get(task["Previous Status"], "Completed")
                                     update_task(task["ID"], {
@@ -183,8 +183,8 @@ with tab1:
                                     log_activity(task["ID"], f"{username} manually moved task to {next_status} after timeout")
                                     st.rerun()
 
-                        if task["Status"] not in ["Voting","Completed"] and role in ["editor", "admin"]:
-                            if role == "admin" or task["Created By"] == username:
+                        if task["Status"] not in ["Voting","Completed"] and role in ["Editor", "Admin"]:
+                            if role == "Admin" or task["Created By"] == username:
                                 if st.button("📤 Send for Voting", key=f"{task['ID']}_send_vote"):
                                     now = datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                     update_task(task["ID"], {
@@ -197,7 +197,7 @@ with tab1:
                                     st.success("Task sent for voting!")
                                     st.rerun()
 
-                        if task["Status"] == "Voting" and role in ["editor", "admin"]:
+                        if task["Status"] == "Voting" and role in ["Editor", "Admin"]:
                             voted_by = task.get("Voted By", "")
                             already_voted = username in voted_by.split(",") if voted_by else False
 
@@ -227,7 +227,7 @@ with tab1:
                                         st.error("You downvoted 👎")
                                         st.rerun()
 
-                        if role == "admin":
+                        if role == "Admin":
                             assignees = ["Parth", "Arka", "Mohit", "Rajat", "Nishtha"]
                             if task["Assigned To"] not in assignees:
                                 assignees.append(task["Assigned To"])
@@ -249,7 +249,7 @@ with tab1:
             else:
                 st.info("No tasks to display yet. Start by adding one.")
                     # Allow moving only own tasks (editors), or any task (admin)
-                if role == "admin" or task["Assigned To"] == username:
+                if role == "Admin" or task["Assigned To"] == username:
                     if status != "Completed":
                         next_status = statuses[statuses.index(status)+1]
                         if st.button(f"Move to {next_status}", key=f"{task['ID']}_move"):
@@ -330,59 +330,3 @@ with tab3:
             """, unsafe_allow_html=True)
     else:
         st.info("No activity yet.")
-
-
-
-# with tab3:
-#     st.header("📜 Activity Log")
-#     logs = gs.get_activity_logs()
-#     st_autorefresh(interval=10 * 1000, key="activity_refresh")
-    
-#     if logs:
-#         entries = []
-
-#         for log in logs:
-#             title = log['Title']
-#             task_id = log['Task ID']
-#             for line in log['Log'].split("\n"):
-#                 if line.strip():
-#                     try:
-#                         ts_part, message = line.strip().split("]", 1)
-#                         timestamp = datetime.strptime(ts_part.strip("["), "%Y-%m-%d %H:%M:%S")
-#                         entries.append({
-#                             "timestamp": timestamp,
-#                             "title": title,
-#                             "task_id": task_id,
-#                             "message": message.strip()
-#                         })
-#                     except Exception:
-#                         # Skip malformed entries
-#                         continue
-        
-#         # Sort all entries by timestamp (newest first)
-#         sorted_entries = sorted(entries, key=lambda x: x["timestamp"], reverse=True)
-
-#         for entry in sorted_entries:
-#             st.markdown(f"""
-#                 <div style="
-#                     background-color: #f1f3f5;
-#                     border-left: 5px solid #4B9CD3;
-#                     border-radius: 8px;
-#                     padding: 10px 14px;
-#                     margin-bottom: 12px;
-#                     box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-#                 ">
-#                     <div style="font-weight: 600; font-size: 18px; color: #333;">
-#                         {entry['title']} <span style="font-size: 11px; color: #666;">(ID: {entry['task_id']})</span>
-#                     </div>
-#                     <div style="font-size: 15px; color: #222; margin-top: 4px;">
-#                         {entry['message']}
-#                     </div>
-#                     <div style="font-size: 11px; color: #888; margin-top: 6px; text-align: right;">
-#                         {entry['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}
-#                     </div>
-#                 </div>
-#             """, unsafe_allow_html=True)
-#     else:
-#         st.info("No activity yet.")
-
