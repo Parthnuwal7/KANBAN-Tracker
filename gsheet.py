@@ -13,6 +13,12 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 
 creds_dict = st.secrets["google"]
 
+def get_sheet_df(sheet):
+    return pd.DataFrame(sheet.get_all_records())
+
+def update_cell(sheet, row, col, value):
+    sheet.update_cell(row, col, value)
+
 # Temporary write to a file
 with tempfile.NamedTemporaryFile(mode="w+", delete=False) as tmp:
     json.dump(dict(creds_dict), tmp)
