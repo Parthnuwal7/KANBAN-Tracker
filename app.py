@@ -257,7 +257,7 @@ with tab1:
                                 "Status": next_status,
                                 "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                             })
-                            log_activity(task["ID"], f"{user["name]} moved task to {next_status}")
+                            log_activity(task["ID"], f"{user["name"]} moved task to {next_status}")
                             st.rerun()
 
 with tab3:
