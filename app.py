@@ -58,7 +58,7 @@ voting_tasks = df[
 ]
 
 
-
+role = user["role"]
 with tab2:
     st.header("➕ Add New Task")
     # show Kanban in read-only mode
