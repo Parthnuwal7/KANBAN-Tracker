@@ -362,11 +362,11 @@ def render_my_kanban(df_tasks):
 
     # Card styling
     card_style = """
-        background-color: #0f0f0f;
+        background-color: #242424;
         border-radius: 10px;
-        padding: 20px;
+        padding: 100px;
         margin-bottom: 10px;
-        border-left: 8px solid {color};
+        border-left: 12px solid {color};
         box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     """
 
