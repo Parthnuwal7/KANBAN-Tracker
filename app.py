@@ -74,7 +74,7 @@ with tab2:
         if role == "Admin":
             assigned_to = st.selectbox("Assign to", assignees)
         else:
-            assigned_to = 
+            assigned_to = user["name"]
 
         if st.button("Add Task"):
             task_id = f"TSK{int(datetime.now(ist).timestamp())}"  # unique task ID
