@@ -85,7 +85,7 @@ with tab2:
                 "Title": title,
                 "Description": description,
                 "Assigned To": assigned_to,
-                "Created By": ,
+                "Created By": user["name"] ,
                 "Status": "To Be Done",
                 "Priority": priority,
                 "Deadline": deadline.strftime('%Y-%m-%d'),
