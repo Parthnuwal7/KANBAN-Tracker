@@ -46,7 +46,7 @@ else:
         st.rerun()
 
 
-tab1, tab2, tab3 = st.tabs(["🏠 Home", "➕ Add Task", "📜 Activity Log"])
+tab1, tab2, tab3,tab4 = st.tabs(["🏠 Home", "➕ Add Task", "📜 Activity Log","📌 My Tasks"])
 
 
 # --- Load Tasks ---
@@ -330,3 +330,45 @@ with tab3:
             """, unsafe_allow_html=True)
     else:
         st.info("No activity yet.")
+
+
+with tab4:
+    st.header("📌 My Tasks")
+# ----- LOGIC FOR TAB 4 Personalized tab --------
+# Define priority order for sorting
+priority_order = {'High': 1, 'Medium': 2, 'Low': 3}
+
+# Define status stages for personalized Kanban
+status_stages = ["To Be Done", "In Progress", "In Voting", "Done"]
+
+def render_my_kanban(df_tasks):
+    st.title("📌 My Tasks - Personalized Kanban")
+
+    username = st.session_state.get("username")
+    if not username:
+        st.warning("You must be logged in to view your tasks.")
+        return
+
+    # Filter only tasks assigned to the logged-in user
+    df_user_tasks = df_tasks[df_tasks["Assigned To"] == username].copy()
+
+    # Convert deadline to datetime
+    df_user_tasks["Deadline"] = pd.to_datetime(df_user_tasks["Deadline"], errors='coerce')
+    df_user_tasks["Priority Rank"] = df_user_tasks["Priority"].map(priority_order)
+
+    # Display tasks grouped by new status stages
+    for status in status_stages:
+        st.subheader(f"📍 {status}")
+        status_tasks = df_user_tasks[df_user_tasks["Status"] == status].sort_values(
+            by=["Deadline", "Priority Rank"]
+        )
+        if status_tasks.empty:
+            st.write("No tasks in this stage.")
+        else:
+            for _, task in status_tasks.iterrows():
+                with st.expander(f"📝 {task['Title']} (Due: {task['Deadline'].strftime('%Y-%m-%d') if pd.notnull(task['Deadline']) else 'N/A'})"):
+                    st.markdown(f"**Description:** {task['Description']}")
+                    st.markdown(f"**Priority:** {task['Priority']}")
+                    st.markdown(f"**Created By:** {task['Created By']}")
+                    st.markdown(f"**Last Updated:** {task['Last Updated']}")
+                    st.markdown(f"**Activity Log:**\n{task['Activity Log']}")
