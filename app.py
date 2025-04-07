@@ -91,7 +91,7 @@ with tab2:
                 "Deadline": deadline.strftime('%Y-%m-%d'),
                 "Timestamp": now,
                 "Last Updated": now,
-                "Activity Log": f"[{now}] Task created by {}",
+                "Activity Log": f"[{now}] Task created by {user["name"]}",
                 "Upvotes": "",
                 "Downvotes": "",
                 "Voted By": "",
