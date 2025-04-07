@@ -342,6 +342,8 @@ def render_my_kanban(df_tasks):
     st.title("📌 My Tasks")
 
     username = st.session_state.get("username")
+    st.write("DEBUG: session_state", st.session_state)
+
     if not username:
         st.warning("You must be logged in to view your tasks.")
         return
