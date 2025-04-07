@@ -341,7 +341,8 @@ status_stages = ["To Be Done", "In Progress", "In Voting", "Done"]
 def render_my_kanban(df_tasks):
     st.title("📌 My Tasks")
 
-    username = st.session_state.get("username")
+    username = st.session_state.get("user", {}).get("username")
+    st.write("Logged in as:", username)
     st.write("DEBUG: session_state", st.session_state)
 
     if not username:
@@ -373,4 +374,4 @@ def render_my_kanban(df_tasks):
                     st.markdown(f"**Activity Log:**\n{task['Activity Log']}")
 
 with tab4:
-    render_my_kanban(user)
+    render_my_kanban(df)
