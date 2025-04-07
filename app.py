@@ -57,6 +57,7 @@ voting_tasks = df[
     (df["Upvotes"] != "AUTO-MOVED")
 ]
 
+role = st.session_state["user"]["role"] if "user" in st.session_state else None
 
 # role = user["role"]
 with tab2:
