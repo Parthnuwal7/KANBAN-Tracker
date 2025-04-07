@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 from pytz import timezone
+import gspread_utils
 from gspread_utils import get_sheet_df, update_cell
 
 IST = timezone("Asia/Kolkata")
