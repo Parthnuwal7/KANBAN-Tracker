@@ -61,8 +61,6 @@ voting_tasks = df[
 
 with tab2:
     st.header("➕ Add New Task")
-    if user["role"] == "Viewer":
-        st.warning("You have read-only access.")
     # show Kanban in read-only mode
     if role in ["Editor", "Admin"]:
         title = st.text_input("Task Title")
