@@ -26,19 +26,19 @@ if "user" not in st.session_state:
             user_info = authenticate_user(username, password)
             if user_info:
                 st.session_state["user"] = {
-                    "username": username,
-                    "role": user_info["role"],
-                    "name": user_info["name"]
+                    "Username": username,
+                    "Role": user_info["Role"],
+                    "Name": user_info["Name"]
                 }
-                st.success(f"Welcome {user_info['name']}!")
+                st.success(f"Welcome {user_info['Name']}!")
                 st.rerun()
             else:
                 st.error("Invalid username or password")
 
 else:
     user = st.session_state["user"]
-    role = user["role"]
-    username = user["username"]
+    role = user["Role"]
+    username = user["Username"]
     st.sidebar.write(f"👋 Logged in as {user['name']} ({user['role']})")
     if st.sidebar.button("Logout"):
         del st.session_state["user"]
@@ -58,7 +58,7 @@ voting_tasks = df[
 ]
 
 
-role = user["role"]
+# role = user["role"]
 with tab2:
     st.header("➕ Add New Task")
     # show Kanban in read-only mode
@@ -69,7 +69,7 @@ with tab2:
         deadline = st.date_input("Deadline")
 
         assignees = ["Parth", "Arka", "Mohit", "Rajat", "Nishtha"]
-        if role == "admin":
+        if role == "Admin":
             assigned_to = st.selectbox("Assign to", assignees)
         else:
             assigned_to = username
