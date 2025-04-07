@@ -336,7 +336,7 @@ with tab3:
 priority_order = {'High': 1, 'Medium': 2, 'Low': 3}
 
 # Define status stages for personalized Kanban
-status_stages = ["To Be Done", "In Progress", "In Voting", "Done"]
+status_stages = ["To Be Done", "In Progress", "Completed", "Voting"]
 
 def render_my_kanban(df_tasks):
     st.title("📌 My Tasks")
@@ -357,7 +357,7 @@ def render_my_kanban(df_tasks):
         "To Be Done": col1,
         "In Progress": col2,
         "Completed": col3,
-        "Voting": col4
+        "In Voting": col4
     }
 
     # Card styling
