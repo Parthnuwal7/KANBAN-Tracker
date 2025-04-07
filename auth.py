@@ -6,14 +6,6 @@ import gspread
 
 IST = timezone("Asia/Kolkata")
 
-import streamlit as st
-import pandas as pd
-from datetime import datetime
-from pytz import timezone
-import gspread
-
-IST = timezone("Asia/Kolkata")
-
 # Connect to Google Sheet
 gc = gspread.service_account_from_dict(st.secrets["client_email"]) 
 sheet = gc.open("X101_Tasks")  
