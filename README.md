@@ -1,7 +1,8 @@
 # Kanban Task Tracker
 
 🔗 **Access the App Here**: ([https://x101kanban.streamlit.app/](https://x101kanban.streamlit.app/))
-- (Use username = user)
+- (Use username = user
+- password = user)
 
 A Kanban-style project management tool built using **Streamlit** and **Google Sheets** as the backend. Designed for collaborative task tracking, with dynamic permissions, voting mechanisms, and an intuitive UI.
 
