@@ -37,6 +37,8 @@ if "user" not in st.session_state:
 
 else:
     user = st.session_state["user"]
+    role = user["role"]
+    username = user["username"]
     st.sidebar.write(f"👋 Logged in as {user['name']} ({user['role']})")
     if st.sidebar.button("Logout"):
         del st.session_state["user"]
