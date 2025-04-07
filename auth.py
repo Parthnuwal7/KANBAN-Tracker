@@ -7,7 +7,7 @@ import gspread
 IST = timezone("Asia/Kolkata")
 
 # Connect to Google Sheet
-gc = gspread.service_account_from_dict(st.secrets["client_email"]) 
+gc = gspread.service_account_from_dict(st.secrets["google"])
 sheet = gc.open("X101_Tasks")  
 users_sheet = sheet.worksheet("Users")
 
