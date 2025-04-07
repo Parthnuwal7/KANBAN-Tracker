@@ -74,7 +74,7 @@ with tab2:
         if role == "Admin":
             assigned_to = st.selectbox("Assign to", assignees)
         else:
-            assigned_to = username
+            assigned_to = 
 
         if st.button("Add Task"):
             task_id = f"TSK{int(datetime.now(ist).timestamp())}"  # unique task ID
@@ -85,13 +85,13 @@ with tab2:
                 "Title": title,
                 "Description": description,
                 "Assigned To": assigned_to,
-                "Created By": username,
+                "Created By": ,
                 "Status": "To Be Done",
                 "Priority": priority,
                 "Deadline": deadline.strftime('%Y-%m-%d'),
                 "Timestamp": now,
                 "Last Updated": now,
-                "Activity Log": f"[{now}] Task created by {username}",
+                "Activity Log": f"[{now}] Task created by {}",
                 "Upvotes": "",
                 "Downvotes": "",
                 "Voted By": "",
@@ -180,11 +180,11 @@ with tab1:
                                         "Upvotes": "AUTO-MOVED",
                                         "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                     })
-                                    log_activity(task["ID"], f"{username} manually moved task to {next_status} after timeout")
+                                    log_activity(task["ID"], f"{user["name"]} manually moved task to {next_status} after timeout")
                                     st.rerun()
 
                         if task["Status"] not in ["Voting","Completed"] and role in ["Editor", "Admin"]:
-                            if role == "Admin" or task["Created By"] == username:
+                            if role == "Admin" or task["Created By"] == user["name"]:
                                 if st.button("📤 Send for Voting", key=f"{task['ID']}_send_vote"):
                                     now = datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                     update_task(task["ID"], {
@@ -193,13 +193,13 @@ with tab1:
                                         "Previous Status": task["Status"],
                                         "Last Updated": now
                                     })
-                                    log_activity(task["ID"], f"{username} initiated voting to move task from {task['Status']}")
+                                    log_activity(task["ID"], f"{user["name"]} initiated voting to move task from {task['Status']}")
                                     st.success("Task sent for voting!")
                                     st.rerun()
 
                         if task["Status"] == "Voting" and role in ["Editor", "Admin"]:
                             voted_by = task.get("Voted By", "")
-                            already_voted = username in voted_by.split(",") if voted_by else False
+                            already_voted = user["name"] in voted_by.split(",") if voted_by else False
 
                             if not already_voted:
                                 st.markdown("#### 🗳 Voting In Progress")
@@ -207,23 +207,23 @@ with tab1:
                                 with cols[0]:
                                     if st.button("👍 Upvote", key=f"{task['ID']}_upvote"):
                                         update_task(task["ID"], {
-                                            "Upvotes": (task.get("Upvotes", "") + f",{username}").strip(","),
-                                            "Voted By": (voted_by + f",{username}").strip(","),
+                                            "Upvotes": (task.get("Upvotes", "") + f",{user["name"]}").strip(","),
+                                            "Voted By": (voted_by + f",{user["name"]}").strip(","),
                                             "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                         })
-                                        log_activity(task["ID"], f"{username} upvoted the task.")
+                                        log_activity(task["ID"], f"{user["name"]} upvoted the task.")
                                         st.success("You voted 👍")
                                         st.rerun()
                                 with cols[1]:
                                     downvote_reason = st.text_input("Reason for 👎 downvote", key=f"{task['ID']}_reason")
                                     if st.button("👎 Downvote", key=f"{task['ID']}_downvote"):
-                                        reason_log = f"{username}:{downvote_reason}" if downvote_reason else f"{username}:No reason"
+                                        reason_log = f"{user["name"]}:{downvote_reason}" if downvote_reason else f"{user["name"]}:No reason"
                                         update_task(task["ID"], {
                                             "Downvotes": (task.get("Downvotes", "") + f"|{reason_log}").strip("|"),
-                                            "Voted By": (voted_by + f",{username}").strip(","),
+                                            "Voted By": (voted_by + f",{user["name"]}").strip(","),
                                             "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                         })
-                                        log_activity(task["ID"], f"{username} downvoted the task with reason: {downvote_reason}")
+                                        log_activity(task["ID"], f"{user["name"]} downvoted the task with reason: {downvote_reason}")
                                         st.error("You downvoted 👎")
                                         st.rerun()
 
@@ -244,12 +244,12 @@ with tab1:
                                     "Assigned To": new_assignee,
                                     "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                                 })
-                                log_activity(task["ID"], f"{username} reassigned task to {new_assignee}")
+                                log_activity(task["ID"], f"{user["name"]} reassigned task to {new_assignee}")
                                 st.rerun()
             else:
                 st.info("No tasks to display yet. Start by adding one.")
                     # Allow moving only own tasks (editors), or any task (admin)
-                if role == "Admin" or task["Assigned To"] == username:
+                if role == "Admin" or task["Assigned To"] == user["name"]:
                     if status != "Completed":
                         next_status = statuses[statuses.index(status)+1]
                         if st.button(f"Move to {next_status}", key=f"{task['ID']}_move"):
@@ -257,7 +257,7 @@ with tab1:
                                 "Status": next_status,
                                 "Last Updated": datetime.now(ist).strftime('%Y-%m-%d %H:%M:%S')
                             })
-                            log_activity(task["ID"], f"{username} moved task to {next_status}")
+                            log_activity(task["ID"], f"{user["name]} moved task to {next_status}")
                             st.rerun()
 
 with tab3:
