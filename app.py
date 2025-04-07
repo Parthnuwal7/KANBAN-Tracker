@@ -373,4 +373,4 @@ def render_my_kanban(df_tasks):
                     st.markdown(f"**Activity Log:**\n{task['Activity Log']}")
 
 with tab4:
-    render_my_kanban(df)
+    render_my_kanban(user)
