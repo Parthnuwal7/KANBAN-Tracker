@@ -42,7 +42,7 @@ else:
         del st.session_state["user"]
         st.rerun()
 
-st.sidebar.success(f"Logged in as: {username} ({user['role']})")
+
 tab1, tab2, tab3 = st.tabs(["🏠 Home", "➕ Add Task", "📜 Activity Log"])
 
 
