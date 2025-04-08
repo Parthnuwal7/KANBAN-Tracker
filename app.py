@@ -399,6 +399,12 @@ def render_my_kanban(df_tasks):
                             <p><strong>👍 Upvotes:</strong> {task['Upvotes']}</p>
                         </div>
                     """, unsafe_allow_html=True)
+                    #Action buttons
+                    col_a, col_b = st.columns(2)
+                        with col_a:
+                            st.button("Add Content", key=f"{task_id}_add")
+                        with col_b:
+                            st.button("Comment", key=f"{task_id}_comment")
 
 
 with tab4:
